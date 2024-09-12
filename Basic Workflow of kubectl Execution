@@ -1,0 +1,25 @@
+Command Parsing: kubectl parses the command and determines what action you want to perform. In the example above, kubectl identifies that you want to retrieve (get) a list of resources of type pods.
+
+Configuration File (kubeconfig): kubectl uses the kubeconfig file to locate the Kubernetes API server. The kubeconfig file contains information such as the cluster's API endpoint, authentication credentials, and the current context (which cluster and namespace you're interacting with).
+
+API Request Formation: kubectl forms an HTTP request based on the command. This request is directed to the Kubernetes API server. For example, kubectl get pods translates into an HTTP GET request to the API endpoint /api/v1/namespaces/{namespace}/pods.
+
+Authentication and Authorization: Before the request is processed, kubectl includes authentication details (like a token, certificate, or username/password) in the request header. The Kubernetes API server then authenticates the request and checks if the user has the necessary permissions to perform the requested action (Authorization).
+
+API Server Processing: The API server receives the request and processes it. For a get pods request, the API server fetches the list of pods from etcd (the key-value store where Kubernetes state is stored).
+
+Response: The API server sends a response back to kubectl. The response typically includes the requested data (e.g., a list of pods) in JSON or YAML format.
+
+Output Formatting: kubectl formats the response and presents it to you in the terminal. The output can be in various formats, such as plain text, JSON, YAML, or a custom format specified using the -o option.
+
+3. Example Execution Flow: kubectl get pods
+Command: kubectl get pods
+Process:
+Parsing: kubectl identifies that it's a get operation on pods.
+Configuration: Reads the current context and namespace from ~/.kube/config.
+API Request: Forms a GET request to /api/v1/namespaces/default/pods.
+Authentication: Attaches credentials (like a token) from the kubeconfig file.
+Authorization: The API server checks if you have permission to list pods.
+Data Fetching: The API server retrieves the list of pods from etcd.
+Response: The API server sends back the list of pods.
+Display: kubectl formats and displays the list of pods in the terminal.

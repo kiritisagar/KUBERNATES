@@ -1,3 +1,6 @@
+
+# Both containers share the same network and can access each other via localhost.
+
 # 1. Communication Within a Pod (Same Pod)
 ![image](https://github.com/user-attachments/assets/b0780e06-0003-47df-a242-2fa3bb8eb042)
 
@@ -43,6 +46,7 @@ wget -qO- http://localhost:80
 
 # 2. Communication Between Pods (Same Cluster)
 ![image](https://github.com/user-attachments/assets/6dd54207-1982-489b-aff6-e5359aac7e39)
+
 
 
 

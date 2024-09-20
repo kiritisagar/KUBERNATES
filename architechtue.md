@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/7179ba54-4aba-4212-9d5a-2d9ec43c9042)
+![image](https://github.com/user-attachments/assets/ab3c82c3-1f1b-48b7-baa0-8efe3e748fa6)
 
 # Kubernetes Architecture
 Kubernetes deployment is called a cluster. 

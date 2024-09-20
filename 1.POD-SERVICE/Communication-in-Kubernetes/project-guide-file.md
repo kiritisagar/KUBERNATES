@@ -30,3 +30,9 @@ spec:
 In this example:
 
 Container A (nginx) can communicate with Container B (redis) by accessing localhost:6379.
+
+# 2. Communication Between Pods (Same Cluster)
+![image](https://github.com/user-attachments/assets/6dd54207-1982-489b-aff6-e5359aac7e39)
+
+
+

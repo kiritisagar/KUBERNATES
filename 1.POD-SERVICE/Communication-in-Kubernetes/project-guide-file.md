@@ -18,24 +18,27 @@ metadata:
   name: multi-container-pod
 spec:
   containers:
-  - name: container-a
-    image: nginx
+  - name: nginx-container
+    image: nginx:latest
     ports:
     - containerPort: 80
-  - name: container-b
-    image: redis
-    ports:
-    - containerPort: 6379
+  - name: busybox-container
+    image: busybox:latest
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do sleep 3600; done"]
 
-In this example:
-
-Container A (nginx) can communicate with Container B (redis) by accessing localhost:6379.
 
 
 ![Screenshot (222)](https://github.com/user-attachments/assets/3f90d511-4bd0-4bdd-a5d1-7a3608f40195)
 
 # Enter into the container-a:
 kubectl exec -it multi-container-pod -c container-a -- /bin/sh
+
+# Test communication with the Nginx container:
+
+wget -qO- http://localhost:80
+
+![Screenshot (223)](https://github.com/user-attachments/assets/64e86e15-c5f0-4e05-9fca-28ecfb7e93dc)
 
 
 # 2. Communication Between Pods (Same Cluster)

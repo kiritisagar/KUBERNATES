@@ -1,0 +1,93 @@
+### How Pod-to-Pod Communication Works with FQDN in Kubernetes (different name spaces)
+
+In Kubernetes, when Pods are in different namespaces, communication between them still works, but you need to use the Fully Qualified Domain Name (FQDN) for the Service. Here's how you can set up communication between Pods in different namespaces.
+
+Steps to Set Up Communication Between Pods in Different Namespaces
+Let's assume we have two namespaces:
+
+app-namespace (for the application)
+db-namespace (for the database)
+We'll create Pods and Services in each namespace and demonstrate how to communicate between them.
+
+# step1: Create the db-namespace and app-namespace
+First, create the two namespaces:
+
+kubectl create namespace db-namespace
+kubectl create namespace app-namespace
+
+
+
+
+_______________________________________________________
+Step 1: Create the db-pod (Database Pod)
+## db.yml
+_______________________________________________________
+apiVersion: v1
+kind: Pod
+metadata:
+  name: db-pod
+  labels:
+    app: database
+  namespace: db-namespace
+spec:
+  containers:
+  - name: mysql-container
+    image: mysql:5.7
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: "rootpassword"
+    ports:
+    - containerPort: 3306
+____________________________________________________________
+Step 2: Create a Service for the Database Pod
+## db-svc.yml
+_________________________________________________________
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-service
+  namespace: db-namespace
+spec:
+  selector:
+    app: database
+  ports:
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306
+  type: ClusterIP
+____________________________________________________________
+Step 3: Create the app-pod (Web Application Pod)
+## app.yml
+-------------------------------------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-pod
+  labels:
+    app: webapp
+  namespace: app-namespace
+spec:
+  containers:
+  - name: webapp-container
+    image: debian:latest
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do sleep 3600; done"]
+_______________________________________________________
+
+# step4:apply the files
+
+
+# Step 5: Test Communication Between Pods Using FQDN
+kubectl exec -it app-pod -- /bin/bash
+
+# Enter the app-pod:
+kubectl exec -it app-pod -- /bin/bash
+
+Step 1: Install default-mysql-client
+apt-get update && apt-get install -y default-mysql-client
+
+Step 2: Verify Installation
+mysql --version
+
+Step 3: Connect to MySQL Service
+mysql -h db-service.default.svc.cluster.local -P 3306 -u root -p

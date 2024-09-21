@@ -1,19 +1,174 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nginx-green
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: nginx-green
-  template:
-    metadata:
-      labels:
-        app: nginx-green
-    spec:
-      containers:
-      - name: nginx
-        image: nginx:1.21.0  # New version for green environment
-        ports:
-        - containerPort: 80
+Here's a complete example of a Blue-Green Deployment using Nginx in Kubernetes. This will help you set up two versions of an Nginx application, allowing you to switch traffic between them seamlessly.
+
+### Step-by-Step Blue-Green Deployment with Nginx
+
+#### Step 1: Deploy the Blue Environment
+
+1. **Create the Blue Deployment**
+
+   **blue-deployment.yml**:
+   ```yaml
+   apiVersion: apps/v1
+   kind: Deployment
+   metadata:
+     name: nginx-blue
+   spec:
+     replicas: 3
+     selector:
+       matchLabels:
+         app: nginx
+         version: blue
+     template:
+       metadata:
+         labels:
+           app: nginx
+           version: blue
+       spec:
+         containers:
+         - name: nginx
+           image: nginx:1.21.0
+           ports:
+           - containerPort: 80
+   ```
+
+   Apply the Blue deployment:
+   ```bash
+   kubectl apply -f blue-deployment.yml
+   ```
+
+2. **Create a Service for the Blue Environment**
+
+   **service.yml**:
+   ```yaml
+   apiVersion: v1
+   kind: Service
+   metadata:
+     name: nginx-service
+   spec:
+     selector:
+       app: nginx
+       version: blue
+     ports:
+     - port: 80
+       targetPort: 80
+   ```
+
+   Apply the service:
+   ```bash
+   kubectl apply -f service.yml
+   ```
+
+#### Step 2: Deploy the Green Environment
+
+1. **Create the Green Deployment**
+
+   **green-deployment.yml**:
+   ```yaml
+   apiVersion: apps/v1
+   kind: Deployment
+   metadata:
+     name: nginx-green
+   spec:
+     replicas: 3
+     selector:
+       matchLabels:
+         app: nginx
+         version: green
+     template:
+       metadata:
+         labels:
+           app: nginx
+           version: green
+       spec:
+         containers:
+         - name: nginx
+           image: nginx:1.22.0  # New version
+           ports:
+           - containerPort: 80
+   ```
+
+   Apply the Green deployment:
+   ```bash
+   kubectl apply -f green-deployment.yml
+   ```
+
+#### Step 3: Test the Green Environment
+
+1. **Expose the Green Deployment (Optional)**
+
+   This allows you to test it without switching traffic.
+
+   ```bash
+   kubectl expose deployment nginx-green --type=NodePort --port=80
+   ```
+
+2. **Access the Green Environment**
+
+   Get the NodePort to access the service:
+   ```bash
+   kubectl get services
+   ```
+
+   Use the Node IP and the NodePort to access the Green environment.
+
+#### Step 4: Switch Traffic to the Green Environment
+
+1. **Update the Service to Point to the Green Environment**
+
+   Modify `service.yml` to change the version to green:
+
+   ```yaml
+   spec:
+     selector:
+       app: nginx
+       version: green
+   ```
+
+   Apply the updated service:
+   ```bash
+   kubectl apply -f service.yml
+   ```
+
+2. **Verify Traffic Shift**
+
+   Access the Nginx service using the same method as before. It should now direct traffic to the Green environment.
+
+#### Step 5: Clean Up
+
+1. **Remove the Blue Deployment**
+
+   Once you're confident that the Green deployment is stable:
+   ```bash
+   kubectl delete deployment nginx-blue
+   ```
+
+### Summary of Commands
+
+1. **Deploy Blue**:
+   ```bash
+   kubectl apply -f blue-deployment.yml
+   kubectl apply -f service.yml
+   ```
+
+2. **Deploy Green**:
+   ```bash
+   kubectl apply -f green-deployment.yml
+   ```
+
+3. **Test Green** (optional):
+   ```bash
+   kubectl expose deployment nginx-green --type=NodePort --port=80
+   ```
+
+4. **Switch Traffic**:
+   ```bash
+   kubectl apply -f service.yml
+   ```
+
+5. **Cleanup**:
+   ```bash
+   kubectl delete deployment nginx-blue
+   ```
+
+### Conclusion
+This setup provides a robust way to manage your Nginx deployments, minimizing downtime and allowing for easy rollbacks if necessary. Let me know if you need any further assistance!

@@ -4,11 +4,9 @@ metadata:
   name: nginx-deployment
 spec:
   replicas: 3
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 1  # The maximum number of unavailable pods during the update
-      maxSurge: 1        # The maximum number of extra pods created during the update
+  selector:
+    matchLabels:
+      app: nginx  # This must match the labels in the template
   template:
     metadata:
       labels:
@@ -19,3 +17,8 @@ spec:
         image: nginx:1.21.0  # New version of the image
         ports:
         - containerPort: 80
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1  # The maximum number of unavailable pods during the update
+      maxSurge: 1        # The maximum number of extra pods created during the update

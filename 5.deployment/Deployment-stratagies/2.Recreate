@@ -4,12 +4,15 @@ metadata:
   name: nginx-deployment
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+      app: nginx  # Selector must match the labels in the template
   strategy:
     type: Recreate  # Recreate strategy
   template:
     metadata:
       labels:
-        app: nginx
+        app: nginx  # This label must match the selector
     spec:
       containers:
       - name: nginx

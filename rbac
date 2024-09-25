@@ -1,0 +1,85 @@
+A **Role** in Kubernetes defines a set of permissions for specific actions on resources within a namespace. It tells what actions (like `get`, `list`, or `create`) can be performed on certain resources (like Pods or Services).
+
+A **RoleBinding** connects that Role to a user, group, or service account. It assigns the permissions defined in the Role to those users, allowing them to perform the specified actions.
+
+In short:
+- **Role**: Defines what permissions are allowed.
+- **RoleBinding**: Assigns those permissions to specific users or accounts.
+
+
+
+
+  Let's break down the provided Kubernetes RBAC Role configuration:
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: pod-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+```
+
+### 1. **`apiVersion: rbac.authorization.k8s.io/v1`**:
+   - This specifies the API version used for RBAC (Role-Based Access Control) resources.
+   - The `rbac.authorization.k8s.io` is the API group that handles RBAC objects like `Role`, `ClusterRole`, `RoleBinding`, and `ClusterRoleBinding`.
+   - `v1` indicates it is the stable, version 1 of the API.
+
+---
+
+### 2. **`kind: Role`**:
+   - This defines the type of resource being created. In this case, it’s a **`Role`**.
+   - A **Role** is a namespaced resource that defines a set of permissions for specific resources within that namespace.
+
+---
+
+### 3. **`metadata`**:
+   - **`namespace: default`**: 
+     - This specifies that the Role applies to the **`default` namespace**.
+     - Roles are scoped to a single namespace, meaning the permissions it grants are only valid within that specific namespace.
+   - **`name: pod-reader`**: 
+     - This assigns a name to the Role, in this case, `pod-reader`, which is how the Role will be referenced in RoleBindings or other configurations.
+
+---
+
+### 4. **`rules`**:
+   - This section defines the permissions that this Role grants. It consists of:
+   
+   #### a. **`apiGroups: [""]`**:
+      - This specifies the **API group** to which the resources belong.
+      - The **empty string `""`** refers to the **core API group** (which handles core Kubernetes resources like Pods, Services, ConfigMaps, etc.).
+      - Other API groups might include `apps` (for resources like Deployments) or `rbac.authorization.k8s.io` (for RBAC-related resources).
+   
+   #### b. **`resources: ["pods"]`**:
+      - This specifies which **Kubernetes resource(s)** the Role applies to.
+      - In this case, the Role grants permissions for **Pods** in the namespace.
+   
+   #### c. **`verbs: ["get", "list", "watch"]`**:
+      - **Verbs** define what actions the Role can perform on the resources.
+      - Here’s what each verb means:
+        - **`get`**: Allows reading a specific Pod’s details (e.g., `kubectl get pod <pod-name>`).
+        - **`list`**: Allows listing all Pods in the namespace (e.g., `kubectl get pods`).
+        - **`watch`**: Allows subscribing to real-time updates when the state of a Pod changes (e.g., `kubectl watch pods`).
+
+---
+
+### **Summary**:
+- This `Role` named **`pod-reader`** is applied within the **`default` namespace**.
+- It grants permissions to **read** Pod details, **list** all Pods, and **watch** for Pod state changes.
+- The Role does not allow creating, updating, or deleting Pods; it only permits read-only actions (`get`, `list`, and `watch`) on Pods in the `default` namespace.
+
+This Role can be bound to a user, group, or service account using a **RoleBinding** to allow them these specific actions on Pods within the default namespace.
+
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: pod-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]

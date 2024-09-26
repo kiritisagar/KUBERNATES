@@ -13,6 +13,19 @@ RoleBinding: Associates the permissions defined in a Role with a specific user, 
 1. Kubernetes Role
 A Role is a namespaced resource that grants permissions to resources (like Pods, ConfigMaps, etc.) within that namespace.
 
+
+# Role YAML Structure:
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default  # Role is scoped to a specific namespace
+  name: pod-reader
+rules:
+- apiGroups: [""]     # "" indicates the core API group
+  resources: ["pods"] # Resources this Role applies to
+  verbs: ["get", "list", "watch"]  # Actions this Role allows on the resources
+
 # Explanation of Fields:
 
 # apiVersion: 
@@ -35,6 +48,37 @@ API group of the resources (e.g., "" for core API resources like Pods, or "apps"
 Actions that can be performed on the resources (get, list, create, delete, update, etc.).
 
 
+
+# 2. Kubernetes RoleBinding
+A RoleBinding assigns the permissions from a Role to a specific user, group, or service account. It binds the Role to a subject.
+
+# RoleBinding YAML Structure:
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: pod-reader-binding
+  namespace: default  # Must match the Role's namespace
+subjects:
+- kind: User  # Can also be Group or ServiceAccount
+  name: john  # The name of the user or service account to grant access
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: pod-reader  # Must match the name of the Role
+  apiGroup: rbac.authorization.k8s.io
+
+# Explanation of Fields:
+# subjects: 
+Specifies the entity that will receive the permissions defined in the Role. It can be:
+User: A human or system user.
+Group: A group of users.
+ServiceAccount: A Kubernetes service account.
+
+# roleRef: References the Role that will be bound. This includes:
+kind: Either Role (for namespaced permissions) or ClusterRole (for cluster-wide permissions).
+name: The name of the Role to be referenced.
+apiGroup: The API group for RBAC, which is always rbac.authorization.k8s.io.
 
 
 

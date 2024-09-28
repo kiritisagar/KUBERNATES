@@ -2,20 +2,20 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: logindep
+    app: nginxwebapp  # Updated label
   name: {{ .Release.Name }}-logindep
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: logindep
+      app: nginxwebapp  # Updated label in selector
   template:
     metadata:
       labels:
-        app: logindep
+        app: nginxwebapp  # Updated label in template
     spec:
       containers:
-      - image: {{ .Values.image.repository }} 
-        name: sample
+      - image: nginx:latest
+        name: nginx-container
       imagePullSecrets:
-      - name: helm-secret 
+      - name: helm-secret

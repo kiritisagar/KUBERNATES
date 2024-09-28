@@ -1,0 +1,14 @@
+# pv.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: my-pv
+spec:
+  capacity:
+    storage: 1Gi                # Define the size of the storage
+  accessModes:
+    - ReadWriteOnce             # Define how the volume can be mounted
+  persistentVolumeReclaimPolicy: Retain # Keep data even if PVC is deleted
+  hostPath:                     # Use a local directory for simplicity
+    path: "/mnt/data"
+

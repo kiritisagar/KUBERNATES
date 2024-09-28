@@ -35,3 +35,19 @@ Follow the installation instructions provided on the Helm website for your speci
 # Once installed, you can verify the installation by running:
 
 helm version
+
+
+
+# templates
+
+Templates is one of the most important directory and this is where helm looks for your kubernetes object yaml definitions(Deployment,Services,etc).
+
+# values.yaml
+
+If templates holds the resource definition, then values provides the way to parameterize it.
+
+# Chart.yaml
+
+This file contain the metadata such as chart version, application version or constraints like minimum version of kubernetes/Helm which is required to manage this chart. Some required fields in Chart.yaml
+
+

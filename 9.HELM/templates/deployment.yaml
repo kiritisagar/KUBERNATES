@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: nginxwebapp  # Updated label
-  name: {{ .Release.Name }}-logindep
+  name: {{ .Release.Name }}-nginxwebapp  # Changed from logindep to nginxwebapp
 spec:
   replicas: 3
   selector:
@@ -14,8 +14,8 @@ spec:
       labels:
         app: nginxwebapp  # Updated label in template
     spec:
+      imagePullSecrets:
+      - name: helm-secret  # Moved imagePullSecrets here
       containers:
       - image: nginx:latest
         name: nginx-container
-      imagePullSecrets:
-      - name: helm-secret

@@ -1,0 +1,12 @@
+# pod-with-nodeselector.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+    - name: my-container
+      image: nginx
+  nodeSelector:
+    disktype: ssd                # Pod will only schedule on nodes with the label disktype=ssd
+

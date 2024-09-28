@@ -5,9 +5,8 @@
 replicaCount: 3  # Increased replicas for load handling
 
 image:
-  repository: nginx  # Use the official Nginx image
-  pullPolicy: IfNotPresent
-  tag: "latest"  # Specify the tag for the Nginx image
+  repository: nginx
+  tag: latest
 
 imagePullSecrets: []
 nameOverride: ""

@@ -1,0 +1,15 @@
+# pod-with-toleration.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: toleration-pod
+spec:
+  containers:
+    - name: my-container
+      image: nginx
+  tolerations:
+    - key: "key"
+      operator: "Equal"
+      value: "value"
+      effect: "NoSchedule"
+

@@ -1,0 +1,20 @@
+# pod-with-pod-affinity.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-with-affinity
+spec:
+  containers:
+    - name: my-container
+      image: nginx
+  affinity:
+    podAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        labelSelector:
+          matchExpressions:
+            - key: app
+              operator: In
+              values:
+                - frontend
+        topologyKey: "kubernetes.io/hostname"
+

@@ -1,17 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
-    app: nginxwebapp  # Updated label for Nginx
-  name: {{ .Release.Name }}-nginx-svc  # Updated service name
+  name: {{ .Release.Name }}-nginx
 spec:
+  type: {{ .Values.service.type }}
   ports:
-  - name: http
-    port: 80
-    protocol: TCP
-    targetPort: 80
+    - port: {{ .Values.service.port }}
+      targetPort: 80
   selector:
-    app: nginxwebapp  # Selector updated to match the deployment
-  type: {{ .Values.service.type }}  # Using type from values.yaml
-status:
-  loadBalancer: {}
+    app: nginx

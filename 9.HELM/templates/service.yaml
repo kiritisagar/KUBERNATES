@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}-nginx
 spec:
-  type: {{ .Values.service.type }}
+  type: LoadBalancer  # Change to LoadBalancer
   ports:
     - port: {{ .Values.service.port }}
       targetPort: 80
